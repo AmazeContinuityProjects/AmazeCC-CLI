@@ -1,88 +1,151 @@
 # AmazeCC CLI
 
-<p align="center">
-  <img src="https://img.shields.io/badge/AmazeCC_CLI-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="AmazeCC CLI">
-</p>
+AmazeCC CLI is a terminal user interface for viewing academic-progress data from an AmazeCC/FastAPI backend. It is built in Go with Bubble Tea and Lip Gloss.
 
-<p align="center">
-  <strong>Access AmazeCC from your terminal — grades, attendance, and more</strong>
-</p>
-
-<p align="center">
-  <a href="https://github.com/AmazeContinuityProjects/AmazeCC-CLI"><strong>Repository</strong></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/github/last-commit/AmazeContinuityProjects/AmazeCC-CLI/main?style=flat-square&label=Last%20Commit" alt="Last Commit">
-  <img src="https://img.shields.io/github/repo-size/AmazeContinuityProjects/AmazeCC-CLI?style=flat-square&label=Repo%20Size&color=blueviolet" alt="Repo Size">
-  <br>
-  <img src="https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go">
-</p>
-
----
-
-## Overview
-
-AmazeCC CLI is a native command-line tool that lets you interact with the AmazeCC student ecosystem directly from your terminal. Check your grades, attendance, timetable, and more without opening a browser.
-
----
+The current version is a clean TUI scaffold: it starts a full-screen terminal app, checks backend health through `GET /health`, and provides placeholder screens for dashboard, courses, grades, progress, and profile data.
 
 ## Features
 
-- 📊 View your current grades and CGPA
-- 📋 Check attendance percentages
-- 📅 Browse your class timetable
-- 🔐 Secure credential storage
-- ⚡ Lightning fast — built in Go
+- Full-screen terminal UI powered by Bubble Tea
+- Sidebar navigation for academic-progress sections
+- API health check on startup and manual refresh
+- Configurable backend URL through an environment variable
+- Shared UI components and styles for future screens
 
----
+## Project Status
 
-## Tech Stack
+This repository currently contains the TUI foundation and API client plumbing. The screen content is still placeholder text until the backend endpoints are wired in.
 
-| Category | Technology |
-|----------|------------|
-| **Language** | Go |
-| **API** | AmazeCC Backend API |
+Planned endpoint areas are visible in the app:
 
----
+- `GET /courses`
+- `GET /grades`
+- `GET /progress`
+- `GET /me`
+
+Only `GET /health` is called by the current code.
+
+## Requirements
+
+- Go `1.26.1` or newer, as declared in `go.mod`
+- A terminal that supports ANSI escape sequences
+- Optional: an AmazeCC API server running locally or remotely
 
 ## Installation
 
+Clone the repository:
+
 ```bash
-# Clone the repository
 git clone https://github.com/AmazeContinuityProjects/AmazeCC-CLI.git
 cd AmazeCC-CLI
+```
 
-# Build
-go build -o amazecc
+Install dependencies:
 
-# Run
+```bash
+go mod download
+```
+
+Build the CLI:
+
+```bash
+go build -o amazecc ./cmd/amaze
+```
+
+Run it:
+
+```bash
 ./amazecc
 ```
 
----
+You can also run it without creating a binary:
 
-## Usage
-
-```
-amazecc [command]
-
-Available commands:
-  grades       Fetch your current grades
-  attendance   Check attendance status
-  timetable    View class schedule
-  login        Authenticate with VTOP credentials
-  help         Show this help message
+```bash
+go run ./cmd/amaze
 ```
 
----
+## Configuration
 
-## Contributing
+By default, the CLI connects to:
 
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
+```text
+http://localhost:8000
+```
 
----
+Set `AMAZE_API_URL` to point the CLI at another backend:
+
+```bash
+AMAZE_API_URL="https://api.example.com" ./amazecc
+```
+
+The app checks:
+
+```text
+GET /health
+```
+
+If the endpoint returns a `2xx` response, the status bar shows `connected`. Otherwise, it shows the HTTP status or `unreachable`.
+
+## Keyboard Shortcuts
+
+| Key | Action |
+| --- | --- |
+| `tab`, `right`, `l` | Next screen |
+| `shift+tab`, `left`, `h` | Previous screen |
+| `down`, `j` | Move down in navigation |
+| `up`, `k` | Move up in navigation |
+| `r` | Refresh API health status |
+| `q`, `ctrl+c` | Quit |
+
+## Repository Layout
+
+```text
+.
+├── cmd/amaze/main.go          # Application entry point
+├── internal/api/client.go     # HTTP client and health check
+├── internal/app/              # Bubble Tea model, update loop, messages, views
+├── internal/config/config.go  # Environment-based runtime config
+├── internal/ui/               # Reusable Lip Gloss components and styles
+├── go.mod
+└── go.sum
+```
+
+## Development
+
+Format the code:
+
+```bash
+gofmt -w cmd internal
+```
+
+Run tests:
+
+```bash
+go test ./...
+```
+
+Build:
+
+```bash
+go build -o amazecc ./cmd/amaze
+```
+
+## Extending the App
+
+To add a real data screen:
+
+1. Add an API method in `internal/api/client.go`.
+2. Add any async message type in `internal/app/messages.go`.
+3. Trigger the request from `internal/app/update.go`.
+4. Render the result in `internal/app/view.go`.
+5. Reuse shared layout and styles from `internal/ui`.
+
+## Tech Stack
+
+- Go
+- Bubble Tea
+- Lip Gloss
 
 ## License
 
-MIT
+No license file is currently present in this repository. Add one before publishing or redistributing the project.
