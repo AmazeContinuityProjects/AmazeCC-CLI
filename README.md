@@ -148,4 +148,4 @@ To add a real data screen:
 
 ## License
 
-No license file is currently present in this repository. Add one before publishing or redistributing the project.
+This project is licensed under the [MIT License](LICENSE).
