@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -17,26 +18,25 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// NewClient builds a client pointed at baseURL (e.g. http://localhost:8000).
+// NewClient builds a client pointed at baseURL (e.g. https://api.amazecc.com).
 func NewClient(baseURL string) *Client {
 	return &Client{
-		baseURL: baseURL,
+		baseURL: strings.TrimRight(baseURL, "/"),
 		httpClient: &http.Client{
 			Timeout: 10 * time.Second,
 		},
 	}
 }
 
-// HealthResult is returned by Ping — replace with your API's real health schema later.
+// HealthResult is returned by Ping.
 type HealthResult struct {
 	OK     bool
 	Status string
 }
 
 // Ping checks whether the API is reachable.
-// TODO: point this at your FastAPI /health (or /docs) once you wire real endpoints.
 func (c *Client) Ping(ctx context.Context) (HealthResult, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/health", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL, nil)
 	if err != nil {
 		return HealthResult{}, err
 	}

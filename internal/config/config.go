@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	defaultAPIBaseURL = "http://localhost:8000"
+	defaultAPIBaseURL = "https://api.amazecc.com"
 	defaultAPITimeout = 10 * time.Second
 )
 
@@ -19,7 +19,7 @@ type Config struct {
 	APITimeout time.Duration
 }
 
-// Load reads config from the environment with sensible defaults for local dev.
+// Load reads config from the environment with sensible production defaults.
 func Load() Config {
 	return Config{
 		APIBaseURL: envOr("AMAZE_API_URL", defaultAPIBaseURL),

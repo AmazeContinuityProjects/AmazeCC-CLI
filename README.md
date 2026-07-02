@@ -2,7 +2,7 @@
 
 AmazeCC CLI is a terminal user interface for viewing academic-progress data from an AmazeCC/FastAPI backend. It is built in Go with Bubble Tea and Lip Gloss.
 
-The current version is a clean TUI scaffold: it starts a full-screen terminal app, checks backend health through `GET /health`, and provides placeholder screens for dashboard, courses, grades, progress, and profile data.
+The current version is a clean TUI scaffold: it starts a full-screen terminal app, checks API reachability, and provides placeholder screens for dashboard, courses, grades, progress, and profile data.
 
 ## Features
 
@@ -23,13 +23,13 @@ Planned endpoint areas are visible in the app:
 - `GET /progress`
 - `GET /me`
 
-Only `GET /health` is called by the current code.
+Only the configured API root is called by the current code.
 
 ## Requirements
 
 - Go `1.26.1` or newer, as declared in `go.mod`
 - A terminal that supports ANSI escape sequences
-- Optional: an AmazeCC API server running locally or remotely
+- Optional: access to the AmazeCC API
 
 ## Installation
 
@@ -69,19 +69,19 @@ go run ./cmd/amaze
 By default, the CLI connects to:
 
 ```text
-http://localhost:8000
+https://api.amazecc.com
 ```
 
 Set `AMAZE_API_URL` to point the CLI at another backend:
 
 ```bash
-AMAZE_API_URL="https://api.example.com" ./amazecc
+AMAZE_API_URL="http://localhost:8000" ./amazecc
 ```
 
-The app checks:
+The app checks the configured API root:
 
 ```text
-GET /health
+GET https://api.amazecc.com
 ```
 
 If the endpoint returns a `2xx` response, the status bar shows `connected`. Otherwise, it shows the HTTP status or `unreachable`.
