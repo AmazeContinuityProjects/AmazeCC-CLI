@@ -1,6 +1,6 @@
-# AmazeCC CLI
+# AmazeCC TUI
 
-AmazeCC CLI is a terminal user interface for viewing academic-progress data from an AmazeCC/FastAPI backend. It is built in Go with Bubble Tea and Lip Gloss.
+AmazeCC TUI is a terminal user interface for viewing academic-progress data from an AmazeCC/FastAPI backend. It is built in Go with Bubble Tea and Lip Gloss.
 
 The current version is a clean TUI scaffold: it starts a full-screen terminal app, checks backend health through `GET /health`, and provides placeholder screens for dashboard, courses, grades, progress, and profile data.
 
